@@ -101,7 +101,7 @@ const modelMaterial = new THREE.ShaderMaterial({
 })
 
 let model = null
-const loader = new GLTFLoader()
+const loader = new THREE.GLTFLoader()
 loader.load(
   'assets/model.glb',
   (gltf) => {
