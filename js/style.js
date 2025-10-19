@@ -1,32 +1,25 @@
-// === 🚀 THREE.JS SETUP ===
-import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
-import { GLTFLoader } from 'https://unpkg.com/three@0.160.0/examples/jsm/loaders/GLTFLoader.js';
+import * as THREE from 'three'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
-// === 🎨 CANVAS & SCENE ===
 const canvas = document.querySelector('canvas.webgl')
 const scene = new THREE.Scene()
 scene.background = new THREE.Color(0x000010)
 
-// === 📏 SIZES ===
 const sizes = {
   width: window.innerWidth,
   height: window.innerHeight
 }
 
-// === 🎥 CAMERA ===
 const camera = new THREE.PerspectiveCamera(45, sizes.width / sizes.height, 0.1, 500)
 camera.position.set(0, 2, 10)
 scene.add(camera)
 
-// === ⚙️ RENDERER ===
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true })
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
-// === ⏱️ CLOCK ===
 const clock = new THREE.Clock()
 
-// === 🌌 STARFIELD ===
 const starCount = 5000
 const starGeometry = new THREE.BufferGeometry()
 const starPositions = new Float32Array(starCount * 3)
@@ -39,7 +32,6 @@ starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3
 const starMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.1 })
 scene.add(new THREE.Points(starGeometry, starMaterial))
 
-// === 🌠 WARP SPHERE SHADER (RESTORED LOOK) ===
 const warpMaterial = new THREE.ShaderMaterial({
   uniforms: {
     uTime: { value: 0 },
@@ -81,7 +73,6 @@ const warpSphere = new THREE.Mesh(
 )
 scene.add(warpSphere)
 
-// === 💫 MODEL SHADER MATERIAL ===
 const modelMaterial = new THREE.ShaderMaterial({
   uniforms: {
     uTime: { value: 0 },
@@ -112,7 +103,6 @@ const modelMaterial = new THREE.ShaderMaterial({
   `
 })
 
-// === 🛰️ LOAD GLTF MODEL ===
 let model = null
 const loader = new GLTFLoader()
 loader.load(
@@ -129,7 +119,6 @@ loader.load(
   (err) => console.error('❌ GLTF Load Error:', err)
 )
 
-// === 🎮 MOVEMENT & INPUT ===
 const keys = { w: false, a: false, s: false, d: false, space: false, shift: false }
 const velocity = new THREE.Vector3()
 const acceleration = 0.1
@@ -141,7 +130,6 @@ document.addEventListener('keydown', (e) => {
   if (e.code === 'Space') keys.space = true
   if (e.code === 'ShiftLeft') keys.shift = true
 
-  // === ⬆️⬇️ ARROW KEY COLOR CONTROL ===
   if (e.code === 'ArrowUp') changeModelColor(1)
   if (e.code === 'ArrowDown') changeModelColor(-1)
 })
@@ -152,7 +140,6 @@ document.addEventListener('keyup', (e) => {
   if (e.code === 'ShiftLeft') keys.shift = false
 })
 
-// === 🖱️ CAMERA LOOK (MOUSE LOCK) ===
 let yaw = 0
 let pitch = 0
 const sensitivity = 0.002
@@ -171,7 +158,6 @@ function onMouseMove(e) {
   pitch = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, pitch))
 }
 
-// === 🌈 COLOR INTERACTION LOGIC ===
 let colorIndex = 0
 const colors = [
   new THREE.Color(0x00ff00), // green
@@ -189,7 +175,6 @@ function changeModelColor(direction) {
   })
 }
 
-// === 🔁 ANIMATION LOOP ===
 function animate() {
   const elapsedTime = clock.getElapsedTime()
   warpMaterial.uniforms.uTime.value = elapsedTime
@@ -221,7 +206,6 @@ function animate() {
   requestAnimationFrame(animate)
 }
 
-// === 📐 HANDLE RESIZE ===
 window.addEventListener('resize', () => {
   sizes.width = window.innerWidth
   sizes.height = window.innerHeight
@@ -231,5 +215,4 @@ window.addEventListener('resize', () => {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 })
 
-// === 🏁 START ===
 animate()
