@@ -106,7 +106,7 @@ const modelMaterial = new THREE.ShaderMaterial({
 let model = null
 const loader = new GLTFLoader()
 loader.load(
-  'assets/model.glb',
+  './assets/model.glb',
   (gltf) => {
     gltf.scene.traverse((child) => {
       if (child.isMesh) child.material = modelMaterial
